@@ -11,19 +11,21 @@ class TidyPlugin implements Plugin {
         if (readdirErr) {
           logger.warn('Could not tidy directory', tidyDir, readdirErr);
         } else {
-          files.filter(file => !assets[file]).forEach(file => {
-            fs.unlink(path.resolve(tidyDir, file), unlinkErr => {
-              if (unlinkErr) {
-                logger.warn('Could not delete asset', file, unlinkErr);
-              } else {
-                logger.log('Deleted asset', file);
-              }
+          files
+            .filter((file) => !assets[file])
+            .forEach((file) => {
+              fs.unlink(path.resolve(tidyDir, file), (unlinkErr) => {
+                if (unlinkErr) {
+                  logger.warn('Could not delete asset', file, unlinkErr);
+                } else {
+                  logger.log('Deleted asset', file);
+                }
+              });
             });
-          });
         }
       });
     });
-  }
+  };
 }
 
 export default TidyPlugin;
