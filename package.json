@@ -1,0 +1,13 @@
+{
+  "name": "webpack-tidy-plugin",
+  "version": "0.1.0",
+  "description": "A Webpack plugin that cleans up unnecessary files in the output directory",
+  "main": "index.ts",
+  "repository": "https://github.com/aelindeman/webpack-tidy-plugin",
+  "author": "aelindeman",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.8.0",
+    "webpack": "^4.4.0"
+  }
+}
