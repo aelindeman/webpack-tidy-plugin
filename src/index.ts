@@ -3,10 +3,18 @@ import path from 'path';
 import type { Compiler, Plugin } from 'webpack';
 
 class TidyPlugin implements Plugin {
+  public static invalidOutputDir = (dir: string): boolean =>
+    !dir || dir.match(/^(?:[a-z]:)?[\\/]/i);
+
   public apply = (compiler: Compiler): void => {
     const logger = compiler.getInfrastructureLogger('TidyPlugin');
+    const tidyDir = path.resolve(compiler.outputPath);
+
+    if (TidyPlugin.invalidTidyDir(tidyDir)) {
+      throw new Error('Webpack config invalid or unsafe output path');
+    }
+
     compiler.hooks.emit.tap('TidyPlugin', ({ assets }) => {
-      const tidyDir = path.resolve(compiler.outputPath);
       fs.readdir(tidyDir, (readdirErr, files) => {
         if (readdirErr) {
           logger.warn('Could not tidy directory', tidyDir, readdirErr);
