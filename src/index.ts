@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import type { Compiler, Plugin } from 'webpack';
 
 class TidyPlugin implements Plugin {
