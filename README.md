@@ -1,5 +1,8 @@
 # webpack-tidy-plugin
 
+[![webpack-tidy-plugin](https://img.shields.io/npm/v/webpack-tidy-plugin?style=for-the-badge)](https://www.npmjs.com/package/webpack-tidy-plugin)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/aelindeman/webpack-tidy-plugin?style=for-the-badge))](https://codeclimate.com/github/aelindeman/webpack-tidy-plugin/maintainability)
+
 A [Webpack](https://webpack.js.org) plugin that cleans up unnecessary files in the output directory
 
 ## Why does this exist?
@@ -15,15 +18,16 @@ yarn add webpack-tidy-plugin
 ```
 
 ```typescript
+import path from 'path';
 import webpack from 'webpack';
 import TidyPlugin from 'webpack-tidy-plugin';
 
 const config: webpack.Configuration = {
   context: path.resolve(__dirname, 'src'),
   entry: './index.tsx',
-  output: { 
+  output: {
     path: path.resolve(__dirname, 'dist'),
-  }
+  },
   plugins: [
     new TidyPlugin()
   ]

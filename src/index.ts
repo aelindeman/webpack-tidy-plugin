@@ -1,39 +1,54 @@
 import fs from 'fs';
 import path from 'path';
-import type { Compiler, Plugin } from 'webpack';
+import type { Compiler, Logger, Plugin } from 'webpack';
+
+export interface TidyPluginRunOptions {
+  assets: Record<string, any>;
+  logger: Logger;
+  outputPath: string;
+}
 
 class TidyPlugin implements Plugin {
-  public static invalidOutputDir = (dir: string): boolean =>
-    !dir || dir.match(/^(?:[a-z]:)?[\\/]/i);
-
   public apply = (compiler: Compiler): void => {
-    const logger = compiler.getInfrastructureLogger('TidyPlugin');
     const tidyDir = path.resolve(compiler.outputPath);
-
-    if (TidyPlugin.invalidTidyDir(tidyDir)) {
-      throw new Error('Webpack config invalid or unsafe output path');
+    if (tidyDir === '' || tidyDir === '/') {
+      throw new Error(
+        'Webpack config defines an invalid or unsafe output path'
+      );
     }
 
     compiler.hooks.emit.tap('TidyPlugin', ({ assets }) => {
-      fs.readdir(tidyDir, (readdirErr, files) => {
-        if (readdirErr) {
-          logger.warn('Could not tidy directory', tidyDir, readdirErr);
-        } else {
-          files
-            .filter((file) => !assets[file])
-            .forEach((file) => {
-              fs.unlink(path.resolve(tidyDir, file), (unlinkErr) => {
-                if (unlinkErr) {
-                  logger.warn('Could not delete asset', file, unlinkErr);
-                } else {
-                  logger.log('Deleted asset', file);
-                }
-              });
-            });
-        }
+      TidyPlugin.run({
+        outputPath: tidyDir,
+        logger: compiler.getInfrastructureLogger('TidyPlugin'),
+        assets,
       });
     });
   };
+
+  public static run(options: TidyPluginRunOptions) {
+    fs.readdir(options.outputPath, (readdirErr, files) => {
+      if (readdirErr) {
+        options.logger.warn(
+          'Could not tidy directory',
+          options.outputPath,
+          readdirErr
+        );
+      } else {
+        files
+          .filter((file) => !options.assets[file])
+          .forEach((file) => {
+            fs.unlink(path.resolve(options.outputPath, file), (unlinkErr) => {
+              if (unlinkErr) {
+                options.logger.warn('Could not delete asset', file, unlinkErr);
+              } else {
+                options.logger.log('Deleted asset', file);
+              }
+            });
+          });
+      }
+    });
+  }
 }
 
 export default TidyPlugin;
