@@ -1,9 +1,10 @@
 {
   "name": "webpack-tidy-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Webpack plugin that cleans up unnecessary files in the output directory",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/aelindeman/webpack-tidy-plugin",
   "repository": "https://github.com/aelindeman/webpack-tidy-plugin",
   "author": "aelindeman",
   "license": "MIT",
@@ -11,6 +12,9 @@
     "build": "tsc",
     "format": "prettier --ignore-path=.gitignore '**/*.{json,md,ts}'"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "dependencies": {
     "@types/node": "^12.0.0",
     "@types/webpack": "^4.4.0"

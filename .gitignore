@@ -2,6 +2,8 @@
 .DS_Store
 .env*
 .cache/
+.idea/
+.vscode/
 .yarn/
 dist/
 node_modules/
